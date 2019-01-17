@@ -111,19 +111,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named commandParser.hpp
-
-# Build rule for target.
-commandParser.hpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 commandParser.hpp
-.PHONY : commandParser.hpp
-
-# fast build rule for target.
-commandParser.hpp/fast:
-	$(MAKE) -f CMakeFiles/commandParser.hpp.dir/build.make CMakeFiles/commandParser.hpp.dir/build
-.PHONY : commandParser.hpp/fast
-
-#=============================================================================
 # Target rules for targets named sfarchiver
 
 # Build rule for target.
@@ -137,57 +124,57 @@ sfarchiver/fast:
 .PHONY : sfarchiver/fast
 
 #=============================================================================
-# Target rules for targets named FileStorageEngine.hpp
+# Target rules for targets named CommandProcessor
 
 # Build rule for target.
-FileStorageEngine.hpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 FileStorageEngine.hpp
-.PHONY : FileStorageEngine.hpp
+CommandProcessor: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 CommandProcessor
+.PHONY : CommandProcessor
 
 # fast build rule for target.
-FileStorageEngine.hpp/fast:
-	$(MAKE) -f CMakeFiles/FileStorageEngine.hpp.dir/build.make CMakeFiles/FileStorageEngine.hpp.dir/build
-.PHONY : FileStorageEngine.hpp/fast
+CommandProcessor/fast:
+	$(MAKE) -f CMakeFiles/CommandProcessor.dir/build.make CMakeFiles/CommandProcessor.dir/build
+.PHONY : CommandProcessor/fast
 
 #=============================================================================
-# Target rules for targets named Argument.hpp
+# Target rules for targets named FileStorageEngine
 
 # Build rule for target.
-Argument.hpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Argument.hpp
-.PHONY : Argument.hpp
+FileStorageEngine: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 FileStorageEngine
+.PHONY : FileStorageEngine
 
 # fast build rule for target.
-Argument.hpp/fast:
-	$(MAKE) -f CMakeFiles/Argument.hpp.dir/build.make CMakeFiles/Argument.hpp.dir/build
-.PHONY : Argument.hpp/fast
+FileStorageEngine/fast:
+	$(MAKE) -f CMakeFiles/FileStorageEngine.dir/build.make CMakeFiles/FileStorageEngine.dir/build
+.PHONY : FileStorageEngine/fast
 
-Argument.o: Argument.cpp.o
+CommandProcessor.o: CommandProcessor.cpp.o
 
-.PHONY : Argument.o
+.PHONY : CommandProcessor.o
 
 # target to build an object file
-Argument.cpp.o:
-	$(MAKE) -f CMakeFiles/Argument.hpp.dir/build.make CMakeFiles/Argument.hpp.dir/Argument.cpp.o
-.PHONY : Argument.cpp.o
+CommandProcessor.cpp.o:
+	$(MAKE) -f CMakeFiles/CommandProcessor.dir/build.make CMakeFiles/CommandProcessor.dir/CommandProcessor.cpp.o
+.PHONY : CommandProcessor.cpp.o
 
-Argument.i: Argument.cpp.i
+CommandProcessor.i: CommandProcessor.cpp.i
 
-.PHONY : Argument.i
+.PHONY : CommandProcessor.i
 
 # target to preprocess a source file
-Argument.cpp.i:
-	$(MAKE) -f CMakeFiles/Argument.hpp.dir/build.make CMakeFiles/Argument.hpp.dir/Argument.cpp.i
-.PHONY : Argument.cpp.i
+CommandProcessor.cpp.i:
+	$(MAKE) -f CMakeFiles/CommandProcessor.dir/build.make CMakeFiles/CommandProcessor.dir/CommandProcessor.cpp.i
+.PHONY : CommandProcessor.cpp.i
 
-Argument.s: Argument.cpp.s
+CommandProcessor.s: CommandProcessor.cpp.s
 
-.PHONY : Argument.s
+.PHONY : CommandProcessor.s
 
 # target to generate assembly for a file
-Argument.cpp.s:
-	$(MAKE) -f CMakeFiles/Argument.hpp.dir/build.make CMakeFiles/Argument.hpp.dir/Argument.cpp.s
-.PHONY : Argument.cpp.s
+CommandProcessor.cpp.s:
+	$(MAKE) -f CMakeFiles/CommandProcessor.dir/build.make CMakeFiles/CommandProcessor.dir/CommandProcessor.cpp.s
+.PHONY : CommandProcessor.cpp.s
 
 FileStorageEngine.o: FileStorageEngine.cpp.o
 
@@ -195,7 +182,7 @@ FileStorageEngine.o: FileStorageEngine.cpp.o
 
 # target to build an object file
 FileStorageEngine.cpp.o:
-	$(MAKE) -f CMakeFiles/FileStorageEngine.hpp.dir/build.make CMakeFiles/FileStorageEngine.hpp.dir/FileStorageEngine.cpp.o
+	$(MAKE) -f CMakeFiles/FileStorageEngine.dir/build.make CMakeFiles/FileStorageEngine.dir/FileStorageEngine.cpp.o
 .PHONY : FileStorageEngine.cpp.o
 
 FileStorageEngine.i: FileStorageEngine.cpp.i
@@ -204,7 +191,7 @@ FileStorageEngine.i: FileStorageEngine.cpp.i
 
 # target to preprocess a source file
 FileStorageEngine.cpp.i:
-	$(MAKE) -f CMakeFiles/FileStorageEngine.hpp.dir/build.make CMakeFiles/FileStorageEngine.hpp.dir/FileStorageEngine.cpp.i
+	$(MAKE) -f CMakeFiles/FileStorageEngine.dir/build.make CMakeFiles/FileStorageEngine.dir/FileStorageEngine.cpp.i
 .PHONY : FileStorageEngine.cpp.i
 
 FileStorageEngine.s: FileStorageEngine.cpp.s
@@ -213,35 +200,8 @@ FileStorageEngine.s: FileStorageEngine.cpp.s
 
 # target to generate assembly for a file
 FileStorageEngine.cpp.s:
-	$(MAKE) -f CMakeFiles/FileStorageEngine.hpp.dir/build.make CMakeFiles/FileStorageEngine.hpp.dir/FileStorageEngine.cpp.s
+	$(MAKE) -f CMakeFiles/FileStorageEngine.dir/build.make CMakeFiles/FileStorageEngine.dir/FileStorageEngine.cpp.s
 .PHONY : FileStorageEngine.cpp.s
-
-commandParser.o: commandParser.cpp.o
-
-.PHONY : commandParser.o
-
-# target to build an object file
-commandParser.cpp.o:
-	$(MAKE) -f CMakeFiles/commandParser.hpp.dir/build.make CMakeFiles/commandParser.hpp.dir/commandParser.cpp.o
-.PHONY : commandParser.cpp.o
-
-commandParser.i: commandParser.cpp.i
-
-.PHONY : commandParser.i
-
-# target to preprocess a source file
-commandParser.cpp.i:
-	$(MAKE) -f CMakeFiles/commandParser.hpp.dir/build.make CMakeFiles/commandParser.hpp.dir/commandParser.cpp.i
-.PHONY : commandParser.cpp.i
-
-commandParser.s: commandParser.cpp.s
-
-.PHONY : commandParser.s
-
-# target to generate assembly for a file
-commandParser.cpp.s:
-	$(MAKE) -f CMakeFiles/commandParser.hpp.dir/build.make CMakeFiles/commandParser.hpp.dir/commandParser.cpp.s
-.PHONY : commandParser.cpp.s
 
 fsClient.o: fsClient.cpp.o
 
@@ -277,20 +237,16 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... commandParser.hpp"
-	@echo "... sfarchiver"
-	@echo "... FileStorageEngine.hpp"
 	@echo "... edit_cache"
-	@echo "... Argument.hpp"
-	@echo "... Argument.o"
-	@echo "... Argument.i"
-	@echo "... Argument.s"
+	@echo "... sfarchiver"
+	@echo "... CommandProcessor"
+	@echo "... FileStorageEngine"
+	@echo "... CommandProcessor.o"
+	@echo "... CommandProcessor.i"
+	@echo "... CommandProcessor.s"
 	@echo "... FileStorageEngine.o"
 	@echo "... FileStorageEngine.i"
 	@echo "... FileStorageEngine.s"
-	@echo "... commandParser.o"
-	@echo "... commandParser.i"
-	@echo "... commandParser.s"
 	@echo "... fsClient.o"
 	@echo "... fsClient.i"
 	@echo "... fsClient.s"

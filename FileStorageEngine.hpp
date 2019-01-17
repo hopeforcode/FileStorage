@@ -6,18 +6,21 @@
  * 
  */
 #pragma once
-
-#include "commandParser.hpp"
-#include "Argument.hpp"
+#include <vector>
 
 namespace filestorage{
     class FileStorageEngineBase {
+        private:
+            static FileStorageEngineBase* mInstance;
+        protected:
+            FileStorageEngineBase();
         public:
-            void add(Argument& arg); 
-            void del(Argument& arg);
-            void list(Argument& arg);
-            void getProps(Argument& arg);
-            void extract(Argument& arg);
+            static FileStorageEngineBase* getInstance();
+            void add(); 
+            void del();
+            void list();
+            void getProps();
+            void extract();
             void getVersion();
     };
 }

@@ -10,26 +10,40 @@
 #include <iostream>
 
 namespace filestorage {
+    FileStorageEngineBase* FileStorageEngineBase::mInstance = nullptr;
+
+    FileStorageEngineBase::FileStorageEngineBase(){
+
+    }
+
+    FileStorageEngineBase* FileStorageEngineBase::getInstance(){
+        if(!FileStorageEngineBase::mInstance){
+            FileStorageEngineBase::mInstance = new FileStorageEngineBase;
+        }
+
+        return FileStorageEngineBase::mInstance;
+    }
+
     void showMessage(std::string msg) {
         std::cout << msg << std::endl;
     }
 
-    void FileStorageEngineBase::add(Argument& arg) {
+    void FileStorageEngineBase::add() {
         showMessage("Add");
     }
 
-    void FileStorageEngineBase::del(Argument& arg) {
+    void FileStorageEngineBase::del() {
         showMessage("Delete");
     }
-    void FileStorageEngineBase ::list(Argument& arg) {
+    void FileStorageEngineBase ::list() {
         showMessage("List");
     }
     
-    void FileStorageEngineBase::getProps(Argument& arg) {
+    void FileStorageEngineBase::getProps() {
         showMessage("find");
     }
     
-    void FileStorageEngineBase::extract(Argument& arg) {
+    void FileStorageEngineBase::extract() {
         showMessage("Extract");
     }
     
