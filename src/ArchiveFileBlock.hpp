@@ -5,18 +5,20 @@
  */
 #pragma once
 
-
 #include <iostream>
+
 namespace filestorage {
-    typedef char byte;
-    const int BLOCK_SIZE = 4096;    // the size of a file data block
+    typedef char byte;                  // define type byte
+    const int BLOCK_SIZE = 4096;        // the size of a file data block
 
     struct FileBlock {
-        byte block[BLOCK_SIZE];
+        byte block[BLOCK_SIZE];         // array of bytes, 4Kb
         
-        friend std::istream& operator>>(std::istream& in, FileBlock& obj); 
-        friend std::ostream& operator<<(std::ostream& out, FileBlock& obj); 
-        void read(const std::istream& in);
-        void write(std::ostream& out);
+        friend std::istream& operator>>(std::istream& in, FileBlock& obj);     
+        friend std::ostream& operator<<(std::ostream& out, 
+                                        const FileBlock& obj); 
+
+        void read( std::istream& in);
+        void write(std::ostream& out) const;
     };
 }

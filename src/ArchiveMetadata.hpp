@@ -7,7 +7,6 @@
 #pragma once
 
 #include <iostream>
-#include <memory>
 #include <string>
 
 namespace filestorage {
@@ -30,7 +29,7 @@ namespace filestorage {
             unsigned int fileSize;          // Size of a file
 
             unsigned int blockOffsSize;     // size of Array of block offsets after this metadata struct
-            unsigned int * blockOffs;       // Array of block offsets after this metadata struct
+            unsigned int *blockOffs;       // Array of block offsets after this metadata struct
 
         public:
             friend std::istream& operator>>(std::istream& in, MetaData& obj);
