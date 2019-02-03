@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 namespace filestorage {
     typedef unsigned short file_size_t;
@@ -15,12 +16,12 @@ namespace filestorage {
     typedef unsigned short month_t;
     typedef unsigned short year_t;
 
-    class MetaData {
+    struct MetaData {
         private:
             unsigned int fileNameLen;       // file name length
-            char *fileName;           // file name
+            std::string fileName;           // file name
             unsigned int fileExtLen;        // extension name length
-            char *fileExtension;      // extension name of a file
+            std::string fileExtension;      // extension name of a file
                                             // The date file is added
             day_t dayAdded;
             month_t monthAdded;
