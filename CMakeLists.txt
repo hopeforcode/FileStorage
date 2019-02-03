@@ -1,4 +1,4 @@
-set(CMAKE_VERSION "3.13.2")
+set(CMAKE_VERSION "3.5.1")
 set(PROJECT_NAME "FileStorage")
 cmake_minimum_required(VERSION "${CMAKE_VERSION}")
 
@@ -11,18 +11,4 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # Set compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-add_library(FileStorageEngine FileStorageEngine.hpp FileStorageEngine.cpp)
-add_library(CommandProcessor CommandProcessor.hpp CommandProcessor.cpp)
-target_link_libraries(CommandProcessor FileStorageEngine)
-
-file(GLOB HEADERS *.hpp)
-source_group("Headers" FILES ${HEADERS})
-
-add_executable(sfarchiver 
-${HEADERS} 
-fsClient.cpp
-)
-
-target_link_libraries(sfarchiver 
-CommandProcessor
-)
+add_subdirectory(src)
