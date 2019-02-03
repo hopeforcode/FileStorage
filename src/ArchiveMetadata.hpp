@@ -17,12 +17,14 @@ namespace filestorage {
 
     class MetaData {
         private:
-            const char *fileName;           // file name
-            const char *fileExtension;      // extension name of a file
+            unsigned int fileNameLen;       // file name length
+            char *fileName;           // file name
+            unsigned int fileExtLen;        // extension name length
+            char *fileExtension;      // extension name of a file
                                             // The date file is added
-            day_t day_added;
-            month_t month_added;
-            year_t year_added;
+            day_t dayAdded;
+            month_t monthAdded;
+            year_t yearAdded;
 
             unsigned int fileSize;          // Size of a file
 
@@ -33,7 +35,7 @@ namespace filestorage {
             friend std::istream& operator>>(std::istream& in, MetaData& obj);
             friend std::ostream& operator<<(std::ostream& out, const MetaData& obj);
 
-            void read(const std::istream& in);
+            void read(std::istream& in);
             void write(std::ostream& out) const;
     };
 }
