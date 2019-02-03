@@ -7,14 +7,16 @@
  */
 
 #include "FileStorageEngine.hpp"
+#include <string>
 #include <iostream>
 
 namespace filestorage {
+    const char* VERSION = "1.0";
+    const char* APPNAME = "sfarchiver";
+    const char* BUILDTIME = __DATE__;
     FileStorageEngineBase* FileStorageEngineBase::mInstance = nullptr;
 
-    FileStorageEngineBase::FileStorageEngineBase(){
-
-    }
+    FileStorageEngineBase::FileStorageEngineBase(){}
 
     FileStorageEngineBase* FileStorageEngineBase::getInstance(){
         if(!FileStorageEngineBase::mInstance){
@@ -48,6 +50,8 @@ namespace filestorage {
     }
     
     void FileStorageEngineBase::getVersion() {
-        showMessage("Version");
+        std::cout << APPNAME << " ";
+        std::cout << "version" << VERSION << " ";
+        std::cout << BUILDTIME << std::endl;
     }
 }

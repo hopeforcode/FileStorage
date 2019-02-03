@@ -3,6 +3,8 @@
  *
  * Description: This file defines the file data block in archive
  */
+#pragma once
+
 
 #include <iostream>
 namespace filestorage {

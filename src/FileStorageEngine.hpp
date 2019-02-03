@@ -9,6 +9,9 @@
 #include <vector>
 
 namespace filestorage{
+    extern const char *VERSION;
+    extern const char *APPNAME;
+    extern const char *BUILDTIME;
     class FileStorageEngineBase {
         private:
             static FileStorageEngineBase* mInstance;
