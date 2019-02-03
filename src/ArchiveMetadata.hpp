@@ -16,7 +16,7 @@ namespace filestorage {
     typedef unsigned short month_t;
     typedef unsigned short year_t;
 
-    struct MetaData {
+    class MetaData {
         private:
             unsigned int fileNameLen;       // file name length
             std::string fileName;           // file name
