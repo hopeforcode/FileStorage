@@ -1,3 +1,5 @@
+add_library(ArchiveFileBlock ArchiveFileBlock.hpp ArchiveFileBlock.cpp)
+add_library(ArchiveMetadata ArchiveMetadata.hpp ArchiveMetadata.cpp)
 add_library(FileStorageEngine FileStorageEngine.hpp FileStorageEngine.cpp)
 add_library(CommandProcessor CommandProcessor.hpp CommandProcessor.cpp)
 target_link_libraries(CommandProcessor FileStorageEngine)
