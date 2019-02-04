@@ -91,6 +91,6 @@ namespace filestorage {
                 }
             }
 
-            void run(const std::vector<const char*>& args) const;
+            void run(std::vector<const char*>& args) const;
     };
 }

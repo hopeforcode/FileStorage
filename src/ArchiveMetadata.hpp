@@ -10,6 +10,7 @@
 #include <string>
 
 namespace filestorage {
+    
     typedef unsigned short file_size_t;
     typedef unsigned short day_t;
     typedef unsigned short month_t;
