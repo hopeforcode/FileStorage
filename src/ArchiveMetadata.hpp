@@ -28,15 +28,14 @@ namespace filestorage {
             year_t yearAdded;
 
             unsigned int fileSize;          // Size of a file
-
-            unsigned int blockOffsSize;     // size of Array of block offsets after this metadata struct
-            unsigned int *blockOffs;       // Array of block offsets after this metadata struct
-
+            unsigned int numOfBlocks;       // number of blocks in file
+            
         public:
             friend std::istream& operator>>(std::istream& in, MetaData& obj);
             friend std::ostream& operator<<(std::ostream& out, const MetaData& obj);
 
             void read(std::istream& in);
             void write(std::ostream& out) const;
+            void setFileMetaData(const std::string path);
     };
 }

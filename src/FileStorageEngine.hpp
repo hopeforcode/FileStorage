@@ -15,6 +15,9 @@ namespace filestorage{
     extern const char *VERSION;
     extern const char *APPNAME;
     extern const char *BUILDTIME;
+    extern const std::fstream::openmode APPEND;
+    extern const std::fstream::openmode READ;
+    extern const std::fstream::openmode WRITE;
 
     class FileStorageEngineBase {
         private:
@@ -22,7 +25,7 @@ namespace filestorage{
 
         protected:
             FileStorageEngineBase();
-            std::fstream* file;
+            std::fstream* archiveStream;
 
         public:
             static FileStorageEngineBase* getInstance();
@@ -34,12 +37,12 @@ namespace filestorage{
             void getVersion();
 
             ~FileStorageEngineBase() {
-                if(file) {
-                    if(file->is_open()) {
-                        file->close();
+                if(archiveStream) {
+                    if(archiveStream->is_open()) {
+                        archiveStream->close();
                     }
-                    delete file;
-                    file = nullptr;
+                    delete archiveStream;
+                    archiveStream = nullptr;
                 }
             }
     };

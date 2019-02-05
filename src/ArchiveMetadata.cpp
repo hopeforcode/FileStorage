@@ -6,8 +6,41 @@
 
 
 #include "ArchiveMetadata.hpp"
+#include "ArchiveFileBlock.hpp"
+#include <fstream>
+#include <chrono>
+#include <ctime>
 
 namespace filestorage {
+    
+    // Helper functions
+    int getFileSize(std::string filename) {
+        std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
+        return in.tellg(); 
+    }
+
+    std::string getFileExtension(std::string filePath) {
+        std::size_t dotPos = filePath.rfind('.');
+
+        if(dotPos != std::string::npos) {
+            return filePath.substr(dotPos + 1);
+        }
+        return "";
+    }
+
+    std::string getFileName(std::string filePath, bool withExtension = true, char seperator = '/') {
+        // Get last dot position
+        std::size_t dotPos = filePath.rfind('.');
+        std::size_t sepPos = filePath.rfind(seperator);
+    
+        if(sepPos != std::string::npos)
+        {
+            return filePath.substr(sepPos + 1, filePath.size() - (withExtension || dotPos != std::string::npos ? 1 : dotPos) );
+        }
+        return "";
+    }
+
+    // Implementations
     std::istream& operator>>(std::istream& in, MetaData& obj) {
         obj.read(in);
         return in;
@@ -39,15 +72,7 @@ namespace filestorage {
         in.read(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
 
         // file data blocks
-        in.read(reinterpret_cast<char*>(this->blockOffsSize), sizeof(this->blockOffsSize));
-        if(this->blockOffs) {
-            delete blockOffs;
-            this->blockOffs = new unsigned int[this->blockOffsSize];
-        } 
-
-        for (int i = 0; i < blockOffsSize; ++i) {
-            in.read(reinterpret_cast<char *>(this->blockOffs[i]), sizeof(this->blockOffs[i]));
-        }
+        in.read(reinterpret_cast<char*>(this->numOfBlocks), sizeof(this->numOfBlocks));
     }
 
     void MetaData::write(std::ostream& out) const{
@@ -67,9 +92,19 @@ namespace filestorage {
         out.write(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
 
         // file data blocks
-        out.write(reinterpret_cast<char*>(this->blockOffsSize), sizeof(this->blockOffsSize));
-        for (int i = 0; i < blockOffsSize; ++i) {
-            out.write(reinterpret_cast<char *>(this->blockOffs[i]), sizeof(this->blockOffs[i]));
-        }
+        out.write(reinterpret_cast<char*>(this->numOfBlocks), sizeof(this->numOfBlocks));
+    }
+
+    void MetaData::setFileMetaData(const std::string path) {
+        int size = getFileSize(path);
+        this->fileSize = size;
+        this->fileName = getFileName(path);
+        this->fileNameLen = this->fileName.size();
+        this->fileExtension = getFileExtension(path);
+        this->fileExtLen = this->fileExtension.size();
+        this->numOfBlocks = (this->fileSize + BLOCK_SIZE - 1) / BLOCK_SIZE;
+
+        // TODO: date added
+
     }
 }

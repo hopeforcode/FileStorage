@@ -10,6 +10,7 @@
 #include "ArchiveFileBlock.hpp"
 #include "ArchiveMetadata.hpp"
 #include <string>
+#include <memory>
 #include <iostream>
 
 namespace filestorage {
@@ -17,37 +18,31 @@ namespace filestorage {
     const char* VERSION = "1.0";
     const char* APPNAME = "sfarchiver";
     const char* BUILDTIME = __DATE__;
+    const std::fstream::openmode APPEND = std::fstream::out | std::fstream::binary | std::fstream::app;
+    const std::fstream::openmode READ = std::fstream::in | std::fstream::binary;
+    const std::fstream::openmode WRITE = std::fstream::out | std::fstream::binary;
 
     // helper functions:
     void showMessage(std::string msg) {
         std::cout << msg << std::endl;
     }
 
-    void openFileRead(std::fstream* file,std::string path) {
-        if(file) {
-            if(file->is_open()) file->close();
-            delete file;
-        }
-
-        file = new std::fstream(path, std::fstream::in | std::fstream::binary);
+    std::fstream* openFileRead(std::string path) {
+        std::fstream* file = nullptr;
+        file = new std::fstream(path, READ);
+        return file;
     }
 
-    void openFileAppend(std::fstream* file, std::string path) {
-        if(file) {
-            if(file->is_open()) file->close();
-            delete file;
-        }
-
-        file = new std::fstream(path, std::fstream::in | std::fstream::binary | std::fstream::app);
+    std::fstream* openFileAppend(std::string path) {
+        std::fstream* file = nullptr;
+        file = new std::fstream(path, APPEND);
+        return file;
     }
 
-    void openFileOverwrite(std::fstream* file, std::string path) {
-        if(file) {
-            if(file->is_open()) file->close();
-            delete file;
-        }
-
-        file = new std::fstream(path, std::fstream::in | std::fstream::binary);
+    std::fstream* openFileWrite(std::string path) {
+        std::fstream* file = nullptr;
+        file = new std::fstream(path, WRITE);
+        return file;
     }
 
     // implementations:
@@ -65,7 +60,17 @@ namespace filestorage {
     }
 
     void FileStorageEngineBase::add(const std::vector<const char*>& args) {
-        
+        std::string archive(args[0]);
+        std::string targetPath(args[1]);
+
+        if(this->archiveStream) {
+            if(this->archiveStream->is_open()) this->archiveStream->close();
+            delete this->archiveStream;
+            this->archiveStream = nullptr;
+        }
+
+        this->archiveStream = openFileAppend(archive);
+        std::unique_ptr<std::fstream> targetFile(openFileRead(targetPath));
     }
 
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {
