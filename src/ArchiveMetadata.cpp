@@ -60,13 +60,14 @@ namespace filestorage {
 
         in.read(reinterpret_cast<char*>(this->fileExtLen), sizeof(this->fileExtLen));
         char extBuffer[this->fileExtLen];
-        in.read(extBuffer, sizeof(char) * this->fileNameLen * sizeof(char));
+        in.read(extBuffer, sizeof(char) * this->fileNameLen);
         this->fileExtension.assign(extBuffer);
 
         // parse date added
-        in.read(reinterpret_cast<char*>(this->dayAdded), sizeof(day_t));
-        in.read(reinterpret_cast<char*>(this->monthAdded), sizeof(month_t));
-        in.read(reinterpret_cast<char*>(this->yearAdded), sizeof(year_t));
+        in.read(reinterpret_cast<char*>(this->dateLen), sizeof(this->dateLen));
+        char dateBuffer[this->dateLen];
+        in.read(dateBuffer, sizeof(char) * this->dateLen);
+        this->dateAdded.assign(dateBuffer);
 
         // file size
         in.read(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
@@ -84,9 +85,8 @@ namespace filestorage {
         out << this->fileExtension;
 
         // parse date added
-        out.write(reinterpret_cast<char*>(this->dayAdded), sizeof(day_t));
-        out.write(reinterpret_cast<char*>(this->monthAdded), sizeof(month_t));
-        out.write(reinterpret_cast<char*>(this->yearAdded), sizeof(year_t));
+        out.write(reinterpret_cast<char*>(this->dateLen), sizeof(this->dateLen));
+        out << this->dateAdded;
 
         // file size
         out.write(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
@@ -104,7 +104,9 @@ namespace filestorage {
         this->fileExtLen = this->fileExtension.size();
         this->numOfBlocks = (this->fileSize + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
-        // TODO: date added
-
+        auto today = std::chrono::system_clock::now();
+        auto today_t = std::chrono::system_clock::to_time_t(today);
+        std::string date = std::ctime(&today_t);
+        this->dateAdded = date;
     }
 }

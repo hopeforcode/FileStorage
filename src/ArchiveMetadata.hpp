@@ -12,9 +12,6 @@
 namespace filestorage {
     
     typedef unsigned short file_size_t;
-    typedef unsigned short day_t;
-    typedef unsigned short month_t;
-    typedef unsigned short year_t;
 
     class MetaData {
         private:
@@ -22,10 +19,9 @@ namespace filestorage {
             std::string fileName;           // file name
             unsigned int fileExtLen;        // extension name length
             std::string fileExtension;      // extension name of a file
-                                            // The date file is added
-            day_t dayAdded;
-            month_t monthAdded;
-            year_t yearAdded;
+                                            
+            unsigned int dateLen;           // the length of string representing date added
+            std::string dateAdded;          // the date file is added
 
             unsigned int fileSize;          // Size of a file
             unsigned int numOfBlocks;       // number of blocks in file
