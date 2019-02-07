@@ -81,6 +81,7 @@ namespace filestorage {
                 addCommand(new FindCommand("find"));
                 addCommand(new ExtractCommand("extract"));
                 addCommand(new VersionCommand("version"));
+                addCommand(new VersionCommand("-v"));
             };
 
             void addCommand(Command* cmd){

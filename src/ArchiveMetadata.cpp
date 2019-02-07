@@ -6,7 +6,7 @@
 
 
 #include "ArchiveMetadata.hpp"
-#include "ArchiveFileBlock.hpp"
+#include "ArchiveFileBuffer.hpp"
 #include <fstream>
 #include <chrono>
 #include <ctime>
@@ -53,46 +53,46 @@ namespace filestorage {
 
     void MetaData::read(std::istream& in) {
         // parse file name and extension
-        in.read(reinterpret_cast<char*>(this->fileNameLen), sizeof(this->fileNameLen));
+        in.read(reinterpret_cast<char*>(&this->fileNameLen), sizeof(this->fileNameLen));
         char buffer[this->fileNameLen];
         in.read(buffer, sizeof(char) * this->fileNameLen);
         this->fileName.assign(buffer);
 
-        in.read(reinterpret_cast<char*>(this->fileExtLen), sizeof(this->fileExtLen));
+        in.read(reinterpret_cast<char*>(&this->fileExtLen), sizeof(this->fileExtLen));
         char extBuffer[this->fileExtLen];
         in.read(extBuffer, sizeof(char) * this->fileNameLen);
         this->fileExtension.assign(extBuffer);
 
         // parse date added
-        in.read(reinterpret_cast<char*>(this->dateLen), sizeof(this->dateLen));
+        in.read(reinterpret_cast<char*>(&this->dateLen), sizeof(this->dateLen));
         char dateBuffer[this->dateLen];
         in.read(dateBuffer, sizeof(char) * this->dateLen);
         this->dateAdded.assign(dateBuffer);
 
         // file size
-        in.read(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
+        in.read(reinterpret_cast<char*>(&this->fileSize), sizeof(this->fileSize));
 
         // file data blocks
-        in.read(reinterpret_cast<char*>(this->numOfBlocks), sizeof(this->numOfBlocks));
+        in.read(reinterpret_cast<char*>(&this->numOfBlocks), sizeof(this->numOfBlocks));
     }
 
     void MetaData::write(std::ostream& out) const{
         // write file name
-        out.write(reinterpret_cast<char*>(this->fileNameLen), sizeof(this->fileNameLen));
+        out.write(reinterpret_cast<const char*>(&this->fileNameLen), sizeof(this->fileNameLen));
         out << this->fileName;
 
-        out.write(reinterpret_cast<char*>(this->fileExtLen), sizeof(this->fileExtLen));
+        out.write(reinterpret_cast<const char*>(&this->fileExtLen), sizeof(this->fileExtLen));
         out << this->fileExtension;
 
         // parse date added
-        out.write(reinterpret_cast<char*>(this->dateLen), sizeof(this->dateLen));
+        out.write(reinterpret_cast<const char*>(&this->dateLen), sizeof(this->dateLen));
         out << this->dateAdded;
 
         // file size
-        out.write(reinterpret_cast<char*>(this->fileSize), sizeof(this->fileSize));
+        out.write(reinterpret_cast<const char*>(&this->fileSize), sizeof(this->fileSize));
 
         // file data blocks
-        out.write(reinterpret_cast<char*>(this->numOfBlocks), sizeof(this->numOfBlocks));
+        out.write(reinterpret_cast<const char*>(&this->numOfBlocks), sizeof(this->numOfBlocks));
     }
 
     void MetaData::setFileMetaData(const std::string path) {

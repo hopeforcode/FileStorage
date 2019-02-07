@@ -7,11 +7,12 @@
  */
 
 #include "FileStorageEngine.hpp"
-#include "ArchiveFileBlock.hpp"
+#include "ArchiveFileBuffer.hpp"
 #include "ArchiveMetadata.hpp"
 #include <string>
 #include <memory>
 #include <iostream>
+#include <algorithm>
 
 namespace filestorage {
 
@@ -27,29 +28,13 @@ namespace filestorage {
         std::cout << msg << std::endl;
     }
 
-    std::fstream* openFileRead(std::string path) {
-        std::fstream* file = nullptr;
-        file = new std::fstream(path, READ);
-        return file;
-    }
-
-    std::fstream* openFileAppend(std::string path) {
-        std::fstream* file = nullptr;
-        file = new std::fstream(path, APPEND);
-        return file;
-    }
-
-    std::fstream* openFileWrite(std::string path) {
-        std::fstream* file = nullptr;
-        file = new std::fstream(path, WRITE);
-        return file;
-    }
-
     // implementations:
 
     FileStorageEngineBase* FileStorageEngineBase::mInstance = nullptr;
 
-    FileStorageEngineBase::FileStorageEngineBase(){}
+    FileStorageEngineBase::FileStorageEngineBase(){
+        this->archiveStream = nullptr;
+    }
 
     FileStorageEngineBase* FileStorageEngineBase::getInstance(){
         if(!FileStorageEngineBase::mInstance){
@@ -69,8 +54,29 @@ namespace filestorage {
             this->archiveStream = nullptr;
         }
 
-        this->archiveStream = openFileAppend(archive);
-        std::unique_ptr<std::fstream> targetFile(openFileRead(targetPath));
+        this->archiveStream = new std::fstream(archive, APPEND);
+        std::fstream targetFileStream(targetPath, READ);
+
+        if(targetFileStream.good() && this->archiveStream->good()) {
+            MetaData meta;
+            meta.setFileMetaData(targetPath);
+            
+            // write meta data to archive first
+            *(this->archiveStream) << meta;
+
+            // write file data block into archive
+            FileBuffer buffer;
+
+            while(!targetFileStream.eof()) {
+                targetFileStream >> buffer;
+                *(this->archiveStream) << buffer;
+            }
+        }
+
+        // close targetFileStream and archiveStream
+        this->archiveStream->flush();
+        this->archiveStream->close();
+        targetFileStream.close();
     }
 
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {

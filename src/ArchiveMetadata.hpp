@@ -27,11 +27,26 @@ namespace filestorage {
             unsigned int numOfBlocks;       // number of blocks in file
             
         public:
+            MetaData() {
+                this->fileNameLen = 0;
+                this->fileExtLen = 0;
+                this->dateLen = 0;
+                this->fileSize = 0;
+                this->numOfBlocks = 0;
+            }
             friend std::istream& operator>>(std::istream& in, MetaData& obj);
             friend std::ostream& operator<<(std::ostream& out, const MetaData& obj);
 
             void read(std::istream& in);
             void write(std::ostream& out) const;
             void setFileMetaData(const std::string path);
+            unsigned int getMetadataSize() {
+                return sizeof(fileNameLen) + sizeof(fileExtLen) + sizeof(dateLen) + sizeof(fileSize) + sizeof(numOfBlocks) +
+                sizeof(char) * (fileNameLen + fileExtLen + dateLen);
+            }
+            std::string toString() {
+                std::string res;
+                res = fileName + " " + fileExtension + " " + dateAdded + " " + std::to_string(fileSize) + " " + std::to_string(numOfBlocks);
+            }
     };
 }
