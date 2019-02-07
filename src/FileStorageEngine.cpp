@@ -82,8 +82,29 @@ namespace filestorage {
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {
         showMessage("Delete");
     }
-    void FileStorageEngineBase ::list(const std::vector<const char*>& args) {
-        showMessage("List");
+    void FileStorageEngineBase::list(const std::vector<const char*>& args) {
+        std::string archive(args[0]);
+
+        if(this->archiveStream) {
+            if(this->archiveStream->is_open()) this->archiveStream->close();
+            delete this->archiveStream;
+            this->archiveStream = nullptr;
+        }
+
+        this->archiveStream = new std::fstream(archive, READ);
+
+        if(this->archiveStream->good()) {
+            MetaData meta;
+
+            while(!this->archiveStream->eof() && this->archiveStream->good()) {
+                *(this->archiveStream) >> meta;
+                std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
+                showMessage(msg);
+                this->archiveStream->seekg(meta.getFileSize(), std::fstream::cur);
+            }
+        }
+
+        this->archiveStream->close();
     }
     
     void FileStorageEngineBase::getProps(const std::vector<const char*>& args) {

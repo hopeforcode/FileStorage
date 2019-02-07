@@ -78,6 +78,7 @@ namespace filestorage {
                 addCommand(new AddCommand("add"));
                 addCommand(new DelCommand("del"));
                 addCommand(new ListCommand("list"));
+                addCommand(new ListCommand("-l"));
                 addCommand(new FindCommand("find"));
                 addCommand(new ExtractCommand("extract"));
                 addCommand(new VersionCommand("version"));

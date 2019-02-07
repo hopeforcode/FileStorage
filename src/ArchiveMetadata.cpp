@@ -71,9 +71,6 @@ namespace filestorage {
 
         // file size
         in.read(reinterpret_cast<char*>(&this->fileSize), sizeof(this->fileSize));
-
-        // file data blocks
-        in.read(reinterpret_cast<char*>(&this->numOfBlocks), sizeof(this->numOfBlocks));
     }
 
     void MetaData::write(std::ostream& out) const{
@@ -90,19 +87,15 @@ namespace filestorage {
 
         // file size
         out.write(reinterpret_cast<const char*>(&this->fileSize), sizeof(this->fileSize));
-
-        // file data blocks
-        out.write(reinterpret_cast<const char*>(&this->numOfBlocks), sizeof(this->numOfBlocks));
     }
 
     void MetaData::setFileMetaData(const std::string path) {
-        int size = getFileSize(path);
+        int size = filestorage::getFileSize(path);
         this->fileSize = size;
-        this->fileName = getFileName(path);
+        this->fileName = filestorage::getFileName(path);
         this->fileNameLen = this->fileName.size();
         this->fileExtension = getFileExtension(path);
         this->fileExtLen = this->fileExtension.size();
-        this->numOfBlocks = (this->fileSize + BLOCK_SIZE - 1) / BLOCK_SIZE;
 
         auto today = std::chrono::system_clock::now();
         auto today_t = std::chrono::system_clock::to_time_t(today);
