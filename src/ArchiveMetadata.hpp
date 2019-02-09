@@ -17,6 +17,7 @@ namespace filestorage {
         private:
             unsigned int fileNameLen;       // file name length
             std::string fileName;           // file name
+            
             unsigned int fileExtLen;        // extension name length
             std::string fileExtension;      // extension name of a file
                                             
@@ -28,8 +29,11 @@ namespace filestorage {
         public:
             MetaData() {
                 this->fileNameLen = 0;
+                this->fileName = "";
                 this->fileExtLen = 0;
+                this->fileExtension = "";
                 this->dateLen = 0;
+                this->dateAdded = "";
                 this->fileSize = 0;
             }
             

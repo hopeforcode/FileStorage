@@ -33,9 +33,10 @@ namespace filestorage {
         std::size_t dotPos = filePath.rfind('.');
         std::size_t sepPos = filePath.rfind(seperator);
     
-        if(sepPos != std::string::npos)
-        {
+        if(sepPos != std::string::npos) {
             return filePath.substr(sepPos + 1, filePath.size() - (withExtension || dotPos != std::string::npos ? 1 : dotPos) );
+        } else if(dotPos != std::string::npos) {
+            return filePath;
         }
         return "";
     }
@@ -53,21 +54,23 @@ namespace filestorage {
 
     void MetaData::read(std::istream& in) {
         // parse file name and extension
+        // in >> this->fileNameLen;
         in.read(reinterpret_cast<char*>(&this->fileNameLen), sizeof(this->fileNameLen));
-        char buffer[this->fileNameLen];
+        char *buffer = new char[this->fileNameLen];
         in.read(buffer, sizeof(char) * this->fileNameLen);
-        this->fileName.assign(buffer);
+        this->fileName.assign(buffer, this->fileNameLen);
 
+        // in >> this->fileExtLen;
         in.read(reinterpret_cast<char*>(&this->fileExtLen), sizeof(this->fileExtLen));
-        char extBuffer[this->fileExtLen];
-        in.read(extBuffer, sizeof(char) * this->fileNameLen);
-        this->fileExtension.assign(extBuffer);
+        char *extBuffer = new char[this->fileExtLen];
+        in.read(extBuffer, sizeof(char) * this->fileExtLen);
+        this->fileExtension.assign(extBuffer, this->fileExtLen);
 
-        // parse date added
+        // // parse date added
         in.read(reinterpret_cast<char*>(&this->dateLen), sizeof(this->dateLen));
-        char dateBuffer[this->dateLen];
+        char *dateBuffer = new char[this->dateLen];
         in.read(dateBuffer, sizeof(char) * this->dateLen);
-        this->dateAdded.assign(dateBuffer);
+        this->dateAdded.assign(dateBuffer, this->dateLen);
 
         // file size
         in.read(reinterpret_cast<char*>(&this->fileSize), sizeof(this->fileSize));
@@ -101,5 +104,6 @@ namespace filestorage {
         auto today_t = std::chrono::system_clock::to_time_t(today);
         std::string date = std::ctime(&today_t);
         this->dateAdded = date;
+        this->dateLen = date.size();
     }
 }

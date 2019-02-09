@@ -95,15 +95,17 @@ namespace filestorage {
 
         if(this->archiveStream->good()) {
             MetaData meta;
+            // FileBuffer buffer;
 
             while(!this->archiveStream->eof() && this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
                 std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
                 showMessage(msg);
-                this->archiveStream->seekg(meta.getFileSize(), std::fstream::cur);
+                this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
             }
         }
 
+        this->archiveStream->flush();
         this->archiveStream->close();
     }
     
