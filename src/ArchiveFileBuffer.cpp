@@ -35,6 +35,11 @@ namespace filestorage {
         }
 
         void FileBuffer::reset() {
-            std::fill(this->block, this->block + BLOCK_SIZE, 0);
+            std::fill(this->block, this->block + this->size, 0);
+        }
+
+        bool FileBuffer::hasSubstr(std::string target) {
+            std::string temp(this->block, this->size);
+            return temp.find(target) != std::string::npos;
         }
 }

@@ -95,8 +95,7 @@ namespace filestorage {
             while(this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
                 if(this->archiveStream->good()){
-                    std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
-                    utils::showMessage(msg);
+                    utils::showMessage(meta.toString());
                     this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
                 }
                 meta.reset();
@@ -108,7 +107,33 @@ namespace filestorage {
     }
     
     void FileStorageEngineBase::getProps(const std::vector<const char*>& args) {
-        utils::showMessage("find");
+        std::string archive(args[0]);
+        std::string targetStr(args[1]);
+
+        if(this->archiveStream) {
+            if(this->archiveStream->is_open()) this->archiveStream->close();
+            delete this->archiveStream;
+            this->archiveStream = nullptr;
+        }
+
+        this->archiveStream = new std::fstream(archive, READ);
+
+        if(this->archiveStream->good()) {
+            MetaData meta;
+
+            while(this->archiveStream->good()) {
+                *(this->archiveStream) >> meta;
+                // check condition;
+                FileBuffer buffer(meta.getFileSize());
+                buffer.read(*(this->archiveStream), meta.getFileSize());
+                if(buffer.hasSubstr(targetStr)) {
+                    utils::showMessage(meta.toString());
+                }
+                meta.reset();
+            }
+        }
+
+        this->archiveStream->close();
     }
     
     void FileStorageEngineBase::extract(const std::vector<const char*>& args) {
@@ -133,7 +158,7 @@ namespace filestorage {
                 if(this->archiveStream->good()){
                     // check if file name matches
                     if(meta.getFileName() == targetFileName) {
-                        FileBuffer buffer;
+                        FileBuffer buffer(meta.getFileSize());
                         buffer.read(*(this->archiveStream), meta.getFileSize());
 
                         // direct buffer content to stream output; targetStream can be used to extract to a file 
