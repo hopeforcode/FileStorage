@@ -7,40 +7,13 @@
 
 #include "ArchiveMetadata.hpp"
 #include "ArchiveFileBuffer.hpp"
+#include "Utils.hpp"
 #include <fstream>
 #include <chrono>
 #include <ctime>
 
 namespace filestorage {
     
-    // Helper functions
-    int getFileSize(std::string filename) {
-        std::ifstream in(filename, std::ifstream::ate | std::ifstream::binary);
-        return in.tellg(); 
-    }
-
-    std::string getFileExtension(std::string filePath) {
-        std::size_t dotPos = filePath.rfind('.');
-
-        if(dotPos != std::string::npos) {
-            return filePath.substr(dotPos + 1);
-        }
-        return "";
-    }
-
-    std::string getFileName(std::string filePath, bool withExtension = true, char seperator = '/') {
-        // Get last dot position
-        std::size_t dotPos = filePath.rfind('.');
-        std::size_t sepPos = filePath.rfind(seperator);
-    
-        if(sepPos != std::string::npos) {
-            return filePath.substr(sepPos + 1, filePath.size() - (withExtension || dotPos != std::string::npos ? 1 : dotPos) );
-        } else if(dotPos != std::string::npos) {
-            return filePath;
-        }
-        return "";
-    }
-
     // Implementations
     std::istream& operator>>(std::istream& in, MetaData& obj) {
         obj.read(in);
@@ -92,12 +65,22 @@ namespace filestorage {
         out.write(reinterpret_cast<const char*>(&this->fileSize), sizeof(this->fileSize));
     }
 
+    void MetaData::reset() {
+        this->fileSize = 0;
+        this->fileName = "";
+        this->fileNameLen = 0;
+        this->fileExtension = "";
+        this->fileExtLen = 0;
+        this->dateLen = 0;
+        this->dateAdded = "";
+    }
+
     void MetaData::setFileMetaData(const std::string path) {
-        int size = filestorage::getFileSize(path);
+        int size = utils::getFileSize(path);
         this->fileSize = size;
-        this->fileName = filestorage::getFileName(path);
+        this->fileName = utils::getFileName(path);
         this->fileNameLen = this->fileName.size();
-        this->fileExtension = getFileExtension(path);
+        this->fileExtension = utils::getFileExtension(path);
         this->fileExtLen = this->fileExtension.size();
 
         auto today = std::chrono::system_clock::now();

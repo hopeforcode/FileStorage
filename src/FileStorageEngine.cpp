@@ -9,6 +9,7 @@
 #include "FileStorageEngine.hpp"
 #include "ArchiveFileBuffer.hpp"
 #include "ArchiveMetadata.hpp"
+#include "Utils.hpp"
 #include <string>
 #include <memory>
 #include <iostream>
@@ -22,11 +23,6 @@ namespace filestorage {
     const std::fstream::openmode APPEND = std::fstream::out | std::fstream::binary | std::fstream::app;
     const std::fstream::openmode READ = std::fstream::in | std::fstream::binary;
     const std::fstream::openmode WRITE = std::fstream::out | std::fstream::binary;
-
-    // helper functions:
-    void showMessage(std::string msg) {
-        std::cout << msg;
-    }
 
     // implementations:
 
@@ -80,7 +76,7 @@ namespace filestorage {
     }
 
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {
-        showMessage("Delete");
+        utils::showMessage("Delete");
     }
     void FileStorageEngineBase::list(const std::vector<const char*>& args) {
         std::string archive(args[0]);
@@ -95,15 +91,15 @@ namespace filestorage {
 
         if(this->archiveStream->good()) {
             MetaData meta;
-            // FileBuffer buffer;
 
             while(this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
                 if(this->archiveStream->good()){
                     std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
-                    showMessage(msg);
+                    utils::showMessage(msg);
                     this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
                 }
+                meta.reset();
             }
         }
 
@@ -112,11 +108,46 @@ namespace filestorage {
     }
     
     void FileStorageEngineBase::getProps(const std::vector<const char*>& args) {
-        showMessage("find");
+        utils::showMessage("find");
     }
     
     void FileStorageEngineBase::extract(const std::vector<const char*>& args) {
-        showMessage("Extract");
+        std::string archive(args[0]);
+        std::string targetPath(args[1]);
+        std::string targetFileName = utils::getFileName(targetPath);
+
+        if(this->archiveStream) {
+            if(this->archiveStream->is_open()) this->archiveStream->close();
+            delete this->archiveStream;
+            this->archiveStream = nullptr;
+        }
+
+        this->archiveStream = new std::fstream(archive, READ);
+        std::fstream targetStream(targetPath, WRITE);
+
+        if(this->archiveStream->good() && targetStream.good()) {
+            MetaData meta;
+
+            while(this->archiveStream->good()) {
+                *(this->archiveStream) >> meta;
+                // std::cout << meta.getFileName() << std::endl;
+                if(this->archiveStream->good()){
+                    // check if file name matches
+                    if(meta.getFileName() == targetFileName) {
+                        FileBuffer buffer;
+                        buffer.read(*(this->archiveStream), meta.getFileSize());
+                        targetStream << buffer;
+                        break;
+                    }
+                }
+                meta.reset();
+            }
+        }
+
+        this->archiveStream->flush();
+        targetStream.flush();
+        targetStream.close();
+        this->archiveStream->close();
     }
     
     void FileStorageEngineBase::getVersion() {

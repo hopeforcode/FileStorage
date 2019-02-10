@@ -18,10 +18,14 @@ namespace filestorage {
             return out;
         }
 
-        void FileBuffer::read(std::istream& in) {
-            in.read(this->block, BLOCK_SIZE * sizeof(byte));
+        void FileBuffer::read(std::istream& in, unsigned int bytes) {
+            in.read(this->block, bytes * sizeof(byte));
             int count = in.gcount();
-            this->size = count < BLOCK_SIZE ? count : BLOCK_SIZE;
+            this->size = count < bytes ? count : bytes;
+        }
+
+        void FileBuffer::read(std::istream& in) {
+            this->read(in, BLOCK_SIZE);
         }
 
         void FileBuffer::write(std::ostream& out) {

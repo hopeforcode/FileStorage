@@ -10,8 +10,6 @@
 #include <string>
 
 namespace filestorage {
-    
-    typedef unsigned short file_size_t;
 
     class MetaData {
         private:
@@ -44,6 +42,8 @@ namespace filestorage {
             void write(std::ostream& out) const;
             void setFileMetaData(const std::string path);
 
+            void reset();
+
             std::string getAddDate() {
                 return this->dateAdded;
             }
@@ -64,6 +64,7 @@ namespace filestorage {
             std::string toString() {
                 std::string res;
                 res = fileName + " " + fileExtension + " " + dateAdded + " " + std::to_string(fileSize);
+                return res;
             }
     };
 }

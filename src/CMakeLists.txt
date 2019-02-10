@@ -1,6 +1,6 @@
 add_library(ArchiveFileBuffer ArchiveFileBuffer.hpp ArchiveFileBuffer.cpp)
-add_library(ArchiveMetadata ArchiveMetadata.hpp ArchiveMetadata.cpp)
-add_library(FileStorageEngine FileStorageEngine.hpp FileStorageEngine.cpp)
+add_library(ArchiveMetadata ArchiveMetadata.hpp ArchiveMetadata.cpp Utils.hpp)
+add_library(FileStorageEngine FileStorageEngine.hpp FileStorageEngine.cpp Utils.hpp)
 add_library(CommandProcessor CommandProcessor.hpp CommandProcessor.cpp)
 
 target_link_libraries(FileStorageEngine ArchiveFileBuffer ArchiveMetadata)
