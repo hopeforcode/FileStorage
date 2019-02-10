@@ -15,11 +15,14 @@ namespace filestorage {
 
     struct FileBuffer {
 
-        byte block[BLOCK_SIZE];         // array of bytes, 4Kb
+        byte* block;         // array of bytes, 4Kb
         unsigned int size;
 
-        FileBuffer() {
-            size = 0;
+        FileBuffer() : FileBuffer(BLOCK_SIZE) {}
+
+        FileBuffer(unsigned int s) {
+            block = new byte[s];
+            size = s;
             reset();
         }
         
@@ -30,5 +33,7 @@ namespace filestorage {
         void read(std::istream& in, unsigned int bytes);
         void write(std::ostream& out);
         void reset();
+
+        bool hasSubstr(std::string target);
     };
 }

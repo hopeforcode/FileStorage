@@ -63,7 +63,7 @@ namespace filestorage {
 
             std::string toString() {
                 std::string res;
-                res = fileName + " " + fileExtension + " " + dateAdded + " " + std::to_string(fileSize);
+                res = fileName + " " + std::to_string(fileSize) + "Kb " + dateAdded;
                 return res;
             }
     };
