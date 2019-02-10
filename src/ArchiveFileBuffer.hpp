@@ -3,6 +3,7 @@
  *
  * Description: This file defines the file data block in archive
  */
+
 #pragma once
 
 #include <iostream>
@@ -26,6 +27,7 @@ namespace filestorage {
         friend std::ostream& operator<<(std::ostream& out, FileBuffer& obj); 
 
         void read(std::istream& in);
+        void read(std::istream& in, unsigned int bytes);
         void write(std::ostream& out);
         void reset();
     };
