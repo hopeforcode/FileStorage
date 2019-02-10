@@ -130,13 +130,14 @@ namespace filestorage {
 
             while(this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
-                // std::cout << meta.getFileName() << std::endl;
                 if(this->archiveStream->good()){
                     // check if file name matches
                     if(meta.getFileName() == targetFileName) {
                         FileBuffer buffer;
                         buffer.read(*(this->archiveStream), meta.getFileSize());
-                        targetStream << buffer;
+
+                        // direct buffer content to stream output; targetStream can be used to extract to a file 
+                        std::cout << buffer;
                         break;
                     }
                 }
