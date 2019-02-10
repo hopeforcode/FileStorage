@@ -41,6 +41,11 @@ namespace filestorage {
     }
 
     void FileStorageEngineBase::add(const std::vector<const char*>& args) {
+        if(args.size() != 2) {
+            utils::showMessage("Number of Arguments doesn't match");
+            return;
+        }
+
         std::string archive(args[0]);
         std::string targetPath(args[1]);
 
@@ -76,9 +81,34 @@ namespace filestorage {
     }
 
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {
-        utils::showMessage("Delete");
+        if(args.size() != 2) {
+            utils::showMessage("Number of Arguments doesn't match");
+            return;
+        }
+
+        std::string archive(args[0]);
+        std::string targetFileName(args[1]);
+
+        if(this->archiveStream) {
+            if(this->archiveStream->is_open()) this->archiveStream->close();
+            delete this->archiveStream;
+            this->archiveStream = nullptr;
+        }
+
+        // TODO: to complete:
+        
+        // stream for reading
+        this->archiveStream = new std::fstream(archive, READ);
+        // stream for compressing file after delete
+        std::fstream archiveOverwriteStream(archive, WRITE);
+
+
     }
     void FileStorageEngineBase::list(const std::vector<const char*>& args) {
+        if(args.size() != 1) {
+            utils::showMessage("Number of Arguments doesn't match");
+            return;
+        }
         std::string archive(args[0]);
 
         if(this->archiveStream) {
@@ -107,6 +137,11 @@ namespace filestorage {
     }
     
     void FileStorageEngineBase::getProps(const std::vector<const char*>& args) {
+        if(args.size() != 2) {
+            utils::showMessage("Number of Arguments doesn't match");
+            return;
+        }
+
         std::string archive(args[0]);
         std::string targetStr(args[1]);
 
@@ -137,6 +172,10 @@ namespace filestorage {
     }
     
     void FileStorageEngineBase::extract(const std::vector<const char*>& args) {
+        if(args.size() != 2) {
+            utils::showMessage("Number of Arguments doesn't match");
+            return;
+        }
         std::string archive(args[0]);
         std::string targetPath(args[1]);
         std::string targetFileName = utils::getFileName(targetPath);
