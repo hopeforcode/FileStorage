@@ -14,6 +14,7 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
+#include <cstdio>
 
 namespace filestorage {
 
@@ -96,13 +97,40 @@ namespace filestorage {
         }
 
         // TODO: to complete:
-        
+
         // stream for reading
         this->archiveStream = new std::fstream(archive, READ);
         // stream for compressing file after delete
-        std::fstream archiveOverwriteStream(archive, WRITE);
+        std::string tempFileName = "tmp";
+        std::fstream archiveCopyStream(tempFileName, WRITE);
 
+        if(this->archiveStream->good() && archiveCopyStream.good()) {
+            MetaData meta;
+            FileBuffer buffer;
+            
+            while(this->archiveStream->good()) {
+                *(this->archiveStream) >> meta;
 
+                if(this->archiveStream->good()) {
+                    if(meta.getFileName() == targetFileName) {
+                        this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
+                    } else {
+                        *(this->archiveStream) >> buffer;
+                        archiveCopyStream << buffer;
+                    }
+                }
+
+                meta.reset();
+            }
+        }
+
+        this->archiveStream->flush();
+        this->archiveStream->close();
+        archiveCopyStream.flush();
+        archiveCopyStream.close();
+
+        std::remove(archive.data());
+        std::rename(tempFileName.data(), archive.data());
     }
     void FileStorageEngineBase::list(const std::vector<const char*>& args) {
         if(args.size() != 1) {
@@ -161,7 +189,7 @@ namespace filestorage {
                 // check condition;
                 FileBuffer buffer(meta.getFileSize());
                 buffer.read(*(this->archiveStream), meta.getFileSize());
-                if(buffer.hasSubstr(targetStr)) {
+                if(meta.isTxtFile() && buffer.hasSubstr(targetStr)) {
                     utils::showMessage(meta.toString());
                 }
                 meta.reset();
