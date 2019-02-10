@@ -25,7 +25,7 @@ namespace filestorage {
 
     // helper functions:
     void showMessage(std::string msg) {
-        std::cout << msg << std::endl;
+        std::cout << msg;
     }
 
     // implementations:
@@ -97,11 +97,13 @@ namespace filestorage {
             MetaData meta;
             // FileBuffer buffer;
 
-            while(!this->archiveStream->eof() && this->archiveStream->good()) {
+            while(this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
-                std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
-                showMessage(msg);
-                this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
+                if(this->archiveStream->good()){
+                    std::string msg = meta.getFileName() + " " + std::to_string(meta.getFileSize()) + "Kb " + meta.getAddDate();
+                    showMessage(msg);
+                    this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
+                }
             }
         }
 
