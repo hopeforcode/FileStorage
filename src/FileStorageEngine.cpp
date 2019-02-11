@@ -21,6 +21,8 @@ namespace filestorage {
     const char* VERSION = "1.0";
     const char* APPNAME = "sfarchiver";
     const char* BUILDTIME = __DATE__;
+    const char* TEMP_FILE = "tmp";
+
     const std::fstream::openmode APPEND = std::fstream::out | std::fstream::binary | std::fstream::app;
     const std::fstream::openmode READ = std::fstream::in | std::fstream::binary;
     const std::fstream::openmode WRITE = std::fstream::out | std::fstream::binary;
@@ -43,7 +45,7 @@ namespace filestorage {
 
     void FileStorageEngineBase::add(const std::vector<const char*>& args) {
         if(args.size() != 2) {
-            utils::showMessage("Number of Arguments doesn't match");
+            utils::showMessage("Number of Arguments doesn't match\n");
             return;
         }
 
@@ -71,6 +73,7 @@ namespace filestorage {
 
             while(!targetFileStream.eof()) {
                 targetFileStream >> buffer;
+
                 *(this->archiveStream) << buffer;
             }
         }
@@ -83,7 +86,7 @@ namespace filestorage {
 
     void FileStorageEngineBase::del(const std::vector<const char*>& args) {
         if(args.size() != 2) {
-            utils::showMessage("Number of Arguments doesn't match");
+            utils::showMessage("Number of Arguments doesn't match\n-");
             return;
         }
 
@@ -101,12 +104,11 @@ namespace filestorage {
         // stream for reading
         this->archiveStream = new std::fstream(archive, READ);
         // stream for compressing file after delete
-        std::string tempFileName = "tmp";
+        std::string tempFileName(TEMP_FILE);
         std::fstream archiveCopyStream(tempFileName, WRITE);
 
         if(this->archiveStream->good() && archiveCopyStream.good()) {
             MetaData meta;
-            FileBuffer buffer;
             
             while(this->archiveStream->good()) {
                 *(this->archiveStream) >> meta;
@@ -115,7 +117,9 @@ namespace filestorage {
                     if(meta.getFileName() == targetFileName) {
                         this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
                     } else {
-                        *(this->archiveStream) >> buffer;
+                        archiveCopyStream << meta;
+                        FileBuffer buffer;
+                        buffer.read(*this->archiveStream, meta.getFileSize());
                         archiveCopyStream << buffer;
                     }
                 }
@@ -166,7 +170,7 @@ namespace filestorage {
     
     void FileStorageEngineBase::getProps(const std::vector<const char*>& args) {
         if(args.size() != 2) {
-            utils::showMessage("Number of Arguments doesn't match");
+            utils::showMessage("Number of Arguments doesn't match\n");
             return;
         }
 
@@ -201,9 +205,10 @@ namespace filestorage {
     
     void FileStorageEngineBase::extract(const std::vector<const char*>& args) {
         if(args.size() != 2) {
-            utils::showMessage("Number of Arguments doesn't match");
+            utils::showMessage("Number of Arguments doesn't match\n");
             return;
         }
+
         std::string archive(args[0]);
         std::string targetPath(args[1]);
         std::string targetFileName = utils::getFileName(targetPath);
@@ -231,6 +236,8 @@ namespace filestorage {
                         // direct buffer content to stream output; targetStream can be used to extract to a file 
                         std::cout << buffer;
                         break;
+                    } else {
+                        this->archiveStream->seekg(meta.getFileSize() * sizeof(byte), std::fstream::cur);
                     }
                 }
                 meta.reset();

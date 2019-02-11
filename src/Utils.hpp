@@ -39,7 +39,8 @@ namespace filestorage { namespace utils {
         } else if(dotPos != std::string::npos) {
             return filePath;
         }
-        return "";
+
+        return filePath;
     }
 
 }}
