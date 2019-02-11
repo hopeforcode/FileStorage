@@ -53,6 +53,8 @@ namespace filestorage {
             if(mCommands.find(cmd) != mCommands.end()){
                 // found matching commands
                 (*(mCommands.at(cmd)))(args);
+            } else {
+                std::cout << "No such command" << std::endl;
             }
         }
     }

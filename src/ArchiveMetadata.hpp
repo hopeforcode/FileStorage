@@ -43,6 +43,10 @@ namespace filestorage {
             void setFileMetaData(const std::string path);
 
             void reset();
+            
+            bool isTxtFile() {
+                return this->fileExtension == "txt";
+            }
 
             std::string getAddDate() {
                 return this->dateAdded;
