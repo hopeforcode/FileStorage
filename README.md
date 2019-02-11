@@ -194,8 +194,8 @@ A C++ project from UCSD ECE 180 (now ECE 141A)
 ### How to run?
 Ensure if you have cmake installed. Pull project, go to project top directory.
 
-1. run {cmake .}, to configure cmake project
-2. run {make}
+1. run ```cmake .```, to configure cmake project
+2. run ```make```
 3. the executable binary will be found under ./bin/sfarchiver
 
 
